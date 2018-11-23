@@ -25,7 +25,8 @@ export default new Router({
     // {
     //   path: '/shouye',
     //   name: 'shouye',
-    //   component: shouye
+    //   component: shouye,
+    //   hidden: true
     // },
     {
       path: '/',
@@ -33,8 +34,8 @@ export default new Router({
       name: '导航一',
       iconCls: 'el-icon-message',//图标样式class
       children: [
-        { path: '/login', component: login, name: 'login', hidden: true },
-        { path: '/shouye', component: shouye, name: '主页'},
+        // { path: '/login', component: login, name: 'login', hidden: true },
+        // { path: '/shouye', component: shouye, name: '主页', hidden: true },
         { path: '/page1', component: page1, name: 'page1' },
         { path: '/page2', component: page2, name: 'page2' },
       ]

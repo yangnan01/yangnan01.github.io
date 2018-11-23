@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view id="aaa"  v-on:listento="showchange" />
-    <!--<canvas v-if="show" v-bind:id="bg"></canvas>-->
+
   </div>
 </template>
 

@@ -60,7 +60,7 @@
       methods:{
         navgate(){
           this.$emit('listento','0');
-          this.$router.push({ path: '/shouye' });
+          this.$router.push({ path: '/page1' });
         }
       }
     }

@@ -1,11 +1,11 @@
 <template>
   <el-row class="shouye contain">
     <el-col class="header" :span="24">
-      <el-col :span="10" class="logo" :class="shrink?'logo-shrink-with':'logo-with'">
-        {{shrink?'': logoName}}
+      <el-col :span="10" class="logo" :class="isCollapse?'logo-shrink-with':'logo-with'">
+        {{isCollapse?'': logoName}}
       </el-col>
       <el-col class="zhankai" :span="10">
-        <div class="tools" @click.prevent="collapse">
+        <div class="tools" @click.prevent="show">
           <i class="el-icon-tickets"></i>
         </div>
       </el-col>
@@ -22,130 +22,131 @@
     </el-col>
 
     <el-col :span="24" class="main-con">
-      <aside :class="shrink?'main-shrink-style':'main-style'">
+      <aside class="oh" :class="isCollapse?'smalla':'biga'">
 
 
-        <el-menu default-active="$route.path" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+
+        <el-menu :default-active="$route.path"  class="el-menu-vertical-demo" unique-opened router @open="handleOpen" @close="handleClose" :collapse="isCollapse"  @select="handleselect">
           <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-            <el-submenu class="tl" :index="index+''" v-if="!item.leaf">
-              <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span slot="title">导航一</span>
-            </template>
-            <el-menu-item-group>
-              <span slot="title">分组一</span>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <span slot="title">选项4</span>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
+            <el-submenu class="tel"  :index="index+''" v-if="!item.leaf">
+              <template slot="title">
+                <i :class="item.iconCls"></i>
+                <span slot="title">{{item.name}}</span>
+              </template>
+                <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+              <!--<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>-->
             </el-submenu>
-          </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
-          </el-menu-item>
-          <el-menu-item index="3" disabled>
-            <i class="el-icon-document"></i>
-            <span slot="title">导航三</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-setting"></i>
-            <span slot="title">导航四</span>
-          </el-menu-item>
-        </el-menu>
-
-
-        <!--导航菜单-->
-        <el-menu :default-active="$route.path" class="el-menu el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"  v-show="!shrink">
-          <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-            <el-submenu class="tl" :index="index+''" v-if="!item.leaf">
-              <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-              <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-            </el-submenu>
-            <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
           </template>
         </el-menu>
-        <!--导航菜单-折叠后-->
-        <ul class="el-menu el-menu-vertical-demo shrink" v-show="shrink" ref="menushrink">
-          <li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
-            <template v-if="!item.leaf">
-              <div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
-              <ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)">
-                <li v-for="child in item.children" v-if="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="$router.push(child.path)">{{child.name}}</li>
-              </ul>
-            </template>
-            <template v-else>
-              <ul>
-                <li class="el-submenu">
-                  <div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].path)"><i :class="item.iconCls"></i></div>
-                </li>
-              </ul>
-            </template>
-          </li>
-        </ul>
       </aside>
+      <section class="content-container transition-box" :class="isCollapse?'newWidth':''">
+        <div class="fl">
+          <el-tag class="newtag"  :class="{'active': isActive(item.path)}" type="danger" :key="index" v-for="(item,index) in tagList" closable :disable-transitions="false" @close="handleClose(index)">
+            <router-link :to="item.path" class="tags-li-title">
+              {{item.name}}
+            </router-link>
+          </el-tag>
+        </div>
+        <div class="grid-content bg-purple-light">
+          <el-col :span="24" class="breadcrumb-container">
+            <strong class="title">{{$route.name}}</strong>
+            <el-breadcrumb separator="/" class="breadcrumb-inner">
+              <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+                {{ item.name }}
+              </el-breadcrumb-item>
+            </el-breadcrumb>
+          </el-col>
+          <el-col :span="24" class="content-wrapper">
+            <transition name="fade" mode="out-in">
+              <router-view></router-view>
+            </transition>
+          </el-col>
+        </div>
+      </section>
     </el-col>
   </el-row>
 </template>
 
 <script>
+  import bus from './bus';
     export default {
         name: "shouye",
         data(){
             return {
-              shrink:false,
-              logoName:'南哥·桂林'
+              isCollapse:false,
+              logoName:'南哥·桂林',
+              tagList:[]
             }
         },
         methods:{
-          collapse(){
-            this.shrink = !this.shrink
+          isActive(path) {
+            return path === this.$route.fullPath;
           },
-          onSubmit() {
-            console.log('submit!');
+          show(){
+            var that = this;
+            that.isCollapse = !that.isCollapse
           },
-          handleopen() {
-            //console.log('handleopen');
+          handleOpen(key, keyPath) {
+            console.log(this.$route.path);
           },
-          handleclose() {
-            //console.log('handleclose');
+          handleClose(key, keyPath) {
+            console.log(key, keyPath);
           },
           handleselect: function (a, b) {
-
+            console.log();
           },
-          //退出登录
-          logout: function () {
-            var _this = this;
-            this.$confirm('确认退出吗?', '提示', {
-              //type: 'warning'
-            }).then(() => {
-              sessionStorage.removeItem('user');
-              _this.$router.push('/login');
-            }).catch(() => {
-
-            });
-
-
+          // 设置标签
+          setTags(route){
+            const isExist = this.tagList.some(item => {
+              return item.path === route.fullPath;
+            })
+            if(!isExist){
+              if(this.tagList.length >= 8){
+                this.tagList.shift();
+              }
+              this.tagList.push({
+                title: route.meta.title,
+                path: route.fullPath,
+                name: route.matched[1].components.default.name
+              })
+            }
+            bus.$emit('tags', this.tagsList);
           },
-          showMenu(i,status){
-            // this.$refs.menushrink.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
+          // 关闭单个标签
+          handleClose(index) {
+            const delItem = this.tagList.splice(index, 1)[0];
+            const item = this.tagList[index] ? this.tagList[index] : this.tagList[index - 1];
+            if (item) {
+              delItem.path === this.$route.fullPath && this.$router.push(item.path);
+            }else{
+              this.$router.push('/page1');
+            }
+          },
+        },
+        computed: {
+          showTags() {
+            // return this.tagsList.length > 0;
           }
+        },
+        watch:{
+          $route(newValue, oldValue){
+            this.setTags(newValue);
+          }
+        },
+        created(){
+          this.setTags(this.$route);
         }
     }
 </script>
 
 <style scoped>
   .logo-shrink-with{
-    width: 60px;
+    width: 65px;
+    transition: all 0.4S;
   }
   .logo-with{
     width: 230px;
+    transition: all 0.4S;
   }
   .tl{
     text-align: left;
@@ -203,6 +204,7 @@
   .main-con aside{
     flex:0 0 230px;
     width: 230px;
+    transition: all 0.4S;
   }
   .main-con aside .el-menu{
     height: 100%;
@@ -215,51 +217,84 @@
     padding-left: 0;
     background-color: #eef1f6;
   }
-  .el-submenu .el-menu:hover {
-    background-color: #76787a !important;
+
+.oh{
+  overflow: auto;
+}
+.oh.smalla:not(.el-menu--collapse){
+  width: 65px;
+  flex:0 0 65px;
+  transition: all 0.4S;
+}
+  .oh::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 4px;
   }
-  .main-con aside .shrink{
-    width:60px;
+  .oh::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.2);
   }
-  .main-con aside .shrink .item{
-    position: relative;
+  .oh::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 0;
+    background: rgba(0,0,0,0.1);
   }
-  .main-con aside .shrink .submenu{
-    position:absolute;
-    top:0px;
-    left:60px;
-    z-index:99999;
-    height:auto;
-    display:none;
+  .tel{
+    text-align: left;
   }
-  .main-shrink-style{
-    flex:0 0 60px;
-    width: 60px;
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 229px;
   }
-  .main-style{
-    flex:0 0 230px;
-    width: 230px;
+  /*.content-container{*/
+    /*!*width: calc(100% - 230px);*!*/
+    /*background-color: red;*/
+  /*}*/
+  .newWidth{
+    idth: calc(100% - 60px);
   }
-  .main-con .content-container{
+  .main-con .content-container:not(.el-menu--collapse) {
     flex:1;
-    /*position: absolute;*/
-    /*right: 0px;*/
-    /*top: 0px;*/
-    /*bottom: 0px;*/
-    /*left: 230px;*/
-    overflow-y: scroll;
-    padding: 20px;
+    /*overflow-y: scroll;*/
+    padding: 5px 15px 15px;
+    transition: all 0.4S;
   }
-  .main-con .content-container .breadcrumb-container .title{
-     width: 200px;
-     float: left;
-     color: #475669;
-   }
-  .main-con .content-container .breadcrumb-container .breadcrumb-inner{
+  .main-con .content-container .breadcrumb-container .title {
+    width: 200px;
+    float: left;
+    color: #475669;
+    text-align: left;
+  }
+  .main-con .content-container .breadcrumb-container .breadcrumb-inner {
     float: right;
   }
-  .main-con .content-container .content-wrapper{
+  .main-con .content-container .content-wrapper {
     background-color: #fff;
     box-sizing: border-box;
+  }
+  .newtag{
+    float: left;
+    background-color: #fff;
+    color: #000;
+  }
+  .newtag a{
+    text-decoration: none;
+  }
+  .newtag.active{
+    background-color: #409EFF;
+    color: #fff;
+  }
+  .newtag.active a{
+    color: #fff;
+  }
+  .newtag:nth-child(n+2){
+    margin-left: 10px;
+  }
+  .fl{
+    width: 100%;
+    float: left;
+    padding: 3px;
+    box-shadow: 2px 2px 2px 2px #ccc;
+    margin-bottom: 5px;
   }
 </style>
