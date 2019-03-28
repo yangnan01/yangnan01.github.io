@@ -31,23 +31,23 @@ export default new Router({
     {
       path: '/',
       component: shouye,
-      name: '导航一',
+      name: '段子',
       iconCls: 'el-icon-message',//图标样式class
       children: [
         // { path: '/login', component: login, name: 'login', hidden: true },
         // { path: '/shouye', component: shouye, name: '主页', hidden: true },
-        { path: '/page1', component: page1, name: 'page1' },
-        { path: '/page2', component: page2, name: 'page2' },
+        { path: '/page1', component: page1, name: '主页' },
+        { path: '/page2', component: page2, name: '段子' },
       ]
     },
     {
       path: '/',
       component: shouye,
-      name: '导航二',
+      name: '播放器',
       iconCls: 'el-icon-edit',
       children: [
-        { path: '/page3', component: page3, name: '页面3' },
-        { path: '/page4', component: page4, name: '页面4' }
+        { path: '/page3', component: page3, name: '音乐' },
+        { path: '/page4', component: page4, name: '视频' }
       ]
     },
     {

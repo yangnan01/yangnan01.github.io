@@ -18,10 +18,11 @@
     "echarts": "^3.3.2",
     "element-ui": "^2.4.9",
     "font-awesome": "^4.7.0",
+    "jquery": "^3.3.1",
     "nprogress": "^0.2.0",
     "vue": "^2.5.2",
+    "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
-    "jquery": "^3.3.1",
     "vuex": "^2.0.0-rc.6"
   },
   "devDependencies": {

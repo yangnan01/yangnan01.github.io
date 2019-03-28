@@ -26,7 +26,7 @@
 
 
 
-        <el-menu :default-active="$route.path"  class="el-menu-vertical-demo" unique-opened router @open="handleOpen" @close="handleClose" :collapse="isCollapse"  @select="handleselect">
+        <el-menu :default-active="$route.path"  class="el-menu-vertical-demo" unique-opened router @open="handleOpen"  :collapse="isCollapse"  @select="handleselect">
           <template  v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
             <el-submenu class="tel"  :index="index+''" v-if="!item.leaf">
               <template slot="title">
@@ -47,7 +47,7 @@
             </router-link>
           </el-tag>
         </div>
-        <div class="grid-content bg-purple-light">
+        <div class="grid-content bg-purple-light" style="height: calc(100% - 43px);margin-top: 43px;">
           <el-col :span="24" class="breadcrumb-container">
             <strong class="title">{{$route.name}}</strong>
             <el-breadcrumb separator="/" class="breadcrumb-inner">
@@ -271,6 +271,8 @@
   .main-con .content-container .content-wrapper {
     background-color: #fff;
     box-sizing: border-box;
+    height: calc(100% - 20px);
+    overflow: hidden;
   }
   .newtag{
     float: left;
@@ -291,7 +293,7 @@
     margin-left: 10px;
   }
   .fl{
-    width: 100%;
+    width: calc(100% - 6px);
     float: left;
     padding: 3px;
     box-shadow: 2px 2px 2px 2px #ccc;
